@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+    <h1>{{ test()}}</h1>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
@@ -31,15 +32,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { HellCounting } from '@/service/HellCounting';
 
 @Component
 export default class HelloWorld extends Vue {
   @Prop() private msg!: string;
+  
 
-  test(): void {
-    let a = 100
-    console.log('hello world' + a)
-  }
 }
 </script>
 
