@@ -17,6 +17,7 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
+    sed -i 's/registry.npm.taobao.org/registry.yarnpkg.com/' yarn.lock
     yarn install
   displayName: 'yarn install'
 
