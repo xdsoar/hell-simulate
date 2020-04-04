@@ -31,7 +31,8 @@
           <el-input-number v-model="slotHold" :min="0" :max="3" placeholder="已有件数"></el-input-number>
         </el-form-item>
       </el-form>
-      <span>hello: {{ calculate(leftWeapon, headgear, slotWeapon, leftWeaponHold, headgearHold, slotHold) }}</span>
+      <span>hello: {{ result }}</span>
+      <el-button type="primary" v-on:click="calculate">计算</el-button>
     </div>
   </div>
 </template>
@@ -44,22 +45,7 @@ import { HellCounting } from "@/service/HellCounting";
 @Component
 export default class HelloWorld extends Vue {
   @Prop() private msg!: string;
-  
-  calculate(
-    leftWeapon: string,
-    headgear: string,
-    slotWeapon: string,
-    leftWeaponHold: number,
-    headgearHold: number,
-    slotWeaponHold: number
-  ) {
-    let hell = new HellCounting();
 
-    return hell.calculateFromData(
-      [leftWeapon, headgear, slotWeapon],
-      leftWeaponHold + headgearHold + slotWeaponHold
-    );
-  }
   data() {
     return {
       leftWeapon: [],
@@ -67,8 +53,7 @@ export default class HelloWorld extends Vue {
       slotWeapon: [],
       leftWeaponHold: 0,
       headgearHold: 0,
-      slotHold: 0,
-      result: 0
+      slotHold: 0
     };
   }
 }

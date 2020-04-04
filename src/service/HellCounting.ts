@@ -3,6 +3,20 @@ import { Weapon } from '@/model/Weapon';
 export class HellCounting {
     static WEAPONLIST: Array<Weapon> = require("@/assets/data.json");
 
+    private mapWeaponWithSuitName(): Map<string, Array<Weapon>> {
+        const weaponMap = new Map();
+        for (let weapon of HellCounting.WEAPONLIST) {
+            let suit = weaponMap.get(weapon.weaponSuit);
+            if (!suit) {
+                suit = [weapon];
+                weaponMap.set(weapon.weaponSuit, suit);
+            } else {
+                suit.push(weapon);
+            }
+        }
+        return weaponMap;
+    }
+
 
     farmingOnce(): Weapon | null {
         if (Math.random() > 0.9) {
@@ -12,12 +26,14 @@ export class HellCounting {
         return null;
     }
 
-    calculateFromData( weaponSuit: Array<string>, hold: number){
-        console.log(weaponSuit);
-        for (let waepon of weaponSuit) {
-
+    graduteWithSuitNameAndHold( weaponSuit: Array<string>, hold: number){
+        const map = this.mapWeaponWithSuitName();
+        let aims = new Array<Weapon>();
+        for (let weapon of weaponSuit) {
+            let suit: Array<Weapon> = map.get(weapon)!;
+            aims = aims.concat(suit);
         }
-        return 1000;
+        return this.graduateWithHold(aims, hold);
     }
 
     graduateWithHold(aimWeapons: Array<Weapon>, hold: number): number {
@@ -44,7 +60,6 @@ export class HellCounting {
             }
             farmingTimes++;
         }
-        console.log('times is ' + farmingTimes);
         return farmingTimes;
     }
 
