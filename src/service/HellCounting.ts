@@ -26,24 +26,26 @@ export class HellCounting {
         return null;
     }
 
-    graduteWithSuitNameAndHold( weaponSuit: Array<string>, hold: number){
+    graduteWithSuitNameAndHold(weaponSuit: Array<string>, hold: number, aceCard: number = 0) {
         const map = this.mapWeaponWithSuitName();
         let aims = new Array<Weapon>();
         for (let weapon of weaponSuit) {
+            if (!weapon)
+                continue;
             let suit: Array<Weapon> = map.get(weapon)!;
             aims = aims.concat(suit);
         }
-        return this.graduateWithHold(aims, hold);
+        return this.graduateWithHold(aims, hold, aceCard);
     }
 
-    graduateWithHold(aimWeapons: Array<Weapon>, hold: number): number {
+    graduateWithHold(aimWeapons: Array<Weapon>, hold: number, aceCard: number = 0): number {
         let weaponRepo: Map<Weapon, number> = new Map();
         for (let weapon of HellCounting.WEAPONLIST) {
             weaponRepo.set(weapon, 0);
         }
         const leftAim = aimWeapons.slice(hold);
         let farmingTimes = 0;
-        while (farmingTimes <= 10000) {
+        while (farmingTimes <= 100000 && leftAim.length > 0) {
             let weapon = this.farmingOnce();
             if (weapon != null) {
                 let curCount = weaponRepo.get(weapon);
@@ -51,11 +53,11 @@ export class HellCounting {
                 let aimCount = 0;
                 for (let aim of leftAim) {
                     let realCount = weaponRepo.get(aim);
-                    if (realCount && realCount >= 1){
+                    if (realCount && realCount >= 1) {
                         aimCount++;
                     }
                 }
-                if (aimCount >= leftAim.length)
+                if (aimCount + aceCard >= leftAim.length)
                     break;
             }
             farmingTimes++;
@@ -65,5 +67,22 @@ export class HellCounting {
 
     graduate(aimWeapons: Array<Weapon>): number {
         return this.graduateWithHold(aimWeapons, 0);
+    }
+
+    calculateForTimes(weaponSuit: Array<string>, hold: number, aceCard: number, times: number): any {
+        let result = new Array<number>();
+        
+        for (let index = 0; index < times; index++) {
+            result.push(this.graduteWithSuitNameAndHold(weaponSuit, hold, aceCard));
+        }
+
+        const sum = result.reduce(function (sum: number, value: number): number {
+            return sum + value;
+        });
+
+        if (sum == 0)
+            return 0;
+        const avg = sum / result.length;
+        return avg;
     }
 }

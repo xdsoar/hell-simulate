@@ -38,6 +38,7 @@ test('should calcute gradute times with weapon suit name', () => {
     const aimSuits = ['改恶', '军神', '大恍惚'];
     let farmingTimes = hell.graduteWithSuitNameAndHold(aimSuits, 2);
     expect(farmingTimes).toBeGreaterThanOrEqual(100);
+    expect(farmingTimes).toBeLessThanOrEqual(50000);
 })
 
 
