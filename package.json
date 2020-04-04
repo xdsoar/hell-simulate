@@ -10,7 +10,8 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "test": "jest"
+    "test": "jest",
+    "deploy": "deploy-aws-s3-cloudfront"
   },
   "main": "background.js",
   "dependencies": {
@@ -18,6 +19,7 @@
     "@types/mocha": "^7.0.2",
     "@vue/test-utils": "^1.0.0-beta.32",
     "core-js": "^3.6.4",
+    "deploy-aws-s3-cloudfront": "^2.3.1",
     "element-ui": "^2.4.5",
     "jest": "^25.2.4",
     "ts-jest": "^25.3.0",
