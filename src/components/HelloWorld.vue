@@ -64,8 +64,9 @@
           <el-button type="primary" v-on:click="mutliCalculate">计算</el-button>
         </el-form-item>
       </el-form>
-      <el-row type="flex" justify="center">
-        <el-col :span="18" class="resultText">平均而言, 你需要肝{{ result }}次深渊</el-col>
+      <el-row type="flex" justify="center" v-if="result">
+        <el-col :span="18" class="resultText">
+          平均而言, 你需要肝{{ result.avg }}次深渊, 比较欧的人能在{{ result.q1}}次以内毕业, 比较非的人需要 {{ result.q3 }} 次以上才能毕业</el-col>
       </el-row>
     </div>
   </div>
@@ -110,13 +111,12 @@ export default class HelloWorld extends Vue {
     if (this.useAce) {
       crossWeapon += 1;
     }
-    let cur = hell.calculateForTimes(
+    this.result = hell.calculateForTimes(
       [this.leftWeapon, this.headgear, this.slotWeapon],
       this.headgearHold + this.leftWeaponHold + this.slotHold,
-      crossWeapon, 
+      crossWeapon,
       this.calculateTime
     );
-    this.result = cur;
   }
 }
 </script>

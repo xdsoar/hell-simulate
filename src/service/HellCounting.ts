@@ -69,9 +69,9 @@ export class HellCounting {
         return this.graduateWithHold(aimWeapons, 0);
     }
 
-    calculateForTimes(weaponSuit: Array<string>, hold: number, aceCard: number, times: number): any {
+    calculateForTimes(weaponSuit: Array<string>, hold: number, aceCard: number=0, times: number=1): any {
         let result = new Array<number>();
-        
+
         for (let index = 0; index < times; index++) {
             result.push(this.graduteWithSuitNameAndHold(weaponSuit, hold, aceCard));
         }
@@ -80,9 +80,18 @@ export class HellCounting {
             return sum + value;
         });
 
+        let sorted = result.sort();
+
         if (sum == 0)
             return 0;
+
+        const quartile1 = sorted[Math.floor(result.length / 4)];
+        const quartile3 = sorted[Math.floor(result.length / 4 * 3)];
         const avg = sum / result.length;
-        return avg;
+        return {
+            avg: avg,
+            q1: quartile1,
+            q3: quartile3
+        }
     }
 }
