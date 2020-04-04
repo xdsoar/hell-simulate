@@ -12,57 +12,43 @@ export class HellCounting {
         return null;
     }
 
+    calculateFromData( weaponSuit: Array<string>, hold: number){
+        console.log(weaponSuit);
+        for (let waepon of weaponSuit) {
 
-    graduateOnce(): number {
-        let weaponRepo: Map<Weapon, number> = new Map();
-        for (let weapon of HellCounting.WEAPONLIST) {
-            weaponRepo.set(weapon, 0);
         }
-
-        let farmingTimes = 0;
-        while (true) {
-            let weapon = this.farmingOnce();
-            if (weapon != null) {
-                let curCount = weaponRepo.get(weapon);
-                weaponRepo.set(weapon, curCount ? curCount + 1 : 1);
-                let aim = weaponRepo.get(HellCounting.WEAPONLIST[0]);
-                if (aim && aim > 4) {
-                    break;
-                }
-                if (farmingTimes > 10000) {
-                    break;
-                }
-            }
-            farmingTimes++;
-        }
-        return farmingTimes;
+        return 1000;
     }
 
-    graduate(aimWeapons: Array<Weapon>): number {
+    graduateWithHold(aimWeapons: Array<Weapon>, hold: number): number {
         let weaponRepo: Map<Weapon, number> = new Map();
         for (let weapon of HellCounting.WEAPONLIST) {
             weaponRepo.set(weapon, 0);
         }
-
+        const leftAim = aimWeapons.slice(hold);
         let farmingTimes = 0;
-        while (true) {
+        while (farmingTimes <= 10000) {
             let weapon = this.farmingOnce();
             if (weapon != null) {
                 let curCount = weaponRepo.get(weapon);
                 weaponRepo.set(weapon, curCount ? curCount + 1 : 1);
                 let aimCount = 0;
-                for (let aim of aimWeapons) {
+                for (let aim of leftAim) {
                     let realCount = weaponRepo.get(aim);
                     if (realCount && realCount >= 1){
                         aimCount++;
                     }
                 }
-                if (aimCount >= aimWeapons.length)
+                if (aimCount >= leftAim.length)
                     break;
             }
             farmingTimes++;
         }
         console.log('times is ' + farmingTimes);
         return farmingTimes;
+    }
+
+    graduate(aimWeapons: Array<Weapon>): number {
+        return this.graduateWithHold(aimWeapons, 0);
     }
 }

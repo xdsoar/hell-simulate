@@ -2,65 +2,73 @@
   <div class="hello">
     <p>For a guide and recipes on how to configure / customize this project</p>
     <div id="weapons">
-      <el-form ref="form" >
-      <el-row :gutter="8" type="flex">
-        <el-col :span="2"> <el-form-item :span="6" label="活动名称" /> </el-col>
-        <el-col :span="2">
-          <el-select v-model="leftWeapon" placehodler="选择防具">
+      <el-form ref="form">
+        <el-form-item label="防具">
+          <el-select v-model="leftWeapon" placeholder="选择防具">
             <el-option key="手搓" value="手搓" />
             <el-option key="改恶" value="改恶" />
             <el-option key="水果" value="水果" />
           </el-select>
-        </el-col>
-        <el-col :span="4" class="hidden-md-and-down">
-          <el-input-number v-model="leftWeaponHold" :min="0" :max="5" label="已有件数" ></el-input-number>
-        </el-col>
-        <el-col :span="4">
-          <el-select v-model="headgear" placehodler="选择首饰">
+          <el-form-item label="已有件数">
+            <el-input-number v-model="leftWeaponHold" :min="0" :max="5" placeholder="已有件数"></el-input-number>
+          </el-form-item>
+        </el-form-item>
+        <el-form-item>
+          <el-select v-model="headgear" placeholder="选择首饰">
             <el-option key="大恍惚" value="大恍惚" />
             <el-option key="幸运777" value="幸运777" />
             <el-option key="上古术士" value="上古术士" />
           </el-select>
-        </el-col>
-        <el-col :span="4" class="hidden-md-and-down">
-          <el-input-number v-model="headgearHold" :min="0" :max="3" label="已有件数" ></el-input-number>
-        </el-col>
-        <el-col :span="4" >
-          <el-select v-model="slot" placehodler="选择特殊装备">
+          <el-input-number v-model="headgearHold" :min="0" :max="3" placeholder="已有件数"></el-input-number>
+        </el-form-item>
+        <el-form-item>
+          <el-select v-model="slotWeapon" placeholder="选择特殊装备">
             <el-option key="军神" value="军神" />
             <el-option key="灵宝" value="灵宝" />
             <el-option key="时间战争" value="时间战争" />
           </el-select>
-        </el-col>
-        <el-col :span="4" class="hidden-md-and-down">
-          <el-input-number v-model="slotHold" :min="0" :max="3" label="已有件数" ></el-input-number>
-        </el-col>
-      </el-row>
+
+          <el-input-number v-model="slotHold" :min="0" :max="3" placeholder="已有件数"></el-input-number>
+        </el-form-item>
       </el-form>
-      <span>
-        防具: {{ leftWeapon }}
-        <br />
-      </span>
-      <span>首饰: {{ headgear }}</span>
+      <span>hello: {{ calculate(leftWeapon, headgear, slotWeapon, leftWeaponHold, headgearHold, slotHold) }}</span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import 'element-ui/lib/theme-chalk/display.css';
+import "element-ui/lib/theme-chalk/display.css";
+import { HellCounting } from "@/service/HellCounting";
 
 @Component
 export default class HelloWorld extends Vue {
   @Prop() private msg!: string;
+  
+  calculate(
+    leftWeapon: string,
+    headgear: string,
+    slotWeapon: string,
+    leftWeaponHold: number,
+    headgearHold: number,
+    slotWeaponHold: number
+  ) {
+    let hell = new HellCounting();
+
+    return hell.calculateFromData(
+      [leftWeapon, headgear, slotWeapon],
+      leftWeaponHold + headgearHold + slotWeaponHold
+    );
+  }
   data() {
     return {
       leftWeapon: [],
       headgear: [],
-      slot: [],
+      slotWeapon: [],
       leftWeaponHold: 0,
       headgearHold: 0,
-      slotHold: 0
+      slotHold: 0,
+      result: 0
     };
   }
 }
@@ -84,6 +92,10 @@ a {
 }
 
 .el-row {
-    margin-bottom: 20px;
-  }
+  margin-bottom: 20px;
+}
+
+.el-input-number {
+  width: 70%;
+}
 </style>
