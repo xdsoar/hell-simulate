@@ -28,13 +28,6 @@ steps:
     yarn run build
   displayName: 'run build'
 
-- task: CopyFiles@2
-  inputs:
-    Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'web'
-    publishLocation: 'Container'
+- script: |
+    yarn run deploy --bucket lab.goatman.me --delete --destination hell-simulate --source ./dist --distribution E9DA1ZNPQOOA2 
+  displayName: 'run publish'
