@@ -80,7 +80,7 @@ export class HellCounting {
             return sum + value;
         });
 
-        let sorted = result.sort();
+        let sorted = result.sort( (n1, n2): number => { return  n1 > n2? 1 : -1});
 
         if (sum == 0)
             return 0;

@@ -43,8 +43,8 @@ test('should calcute gradute times with weapon suit name', () => {
 
 test('should calcute avg and q1 q3 correct', () => {
     let hell = new HellCounting();
-    const aimSuits = ['改恶', '军神', '大恍惚'];
-    const stats = hell.calculateForTimes(aimSuits, 0, 0, 777);
+    const aimSuits = ['大恍惚'];
+    const stats = hell.calculateForTimes(aimSuits, 0, 1, 777);
 
     expect(stats.q1).toBeLessThanOrEqual(stats.q3);
     expect(stats.avg).toBeGreaterThanOrEqual(stats.q1);
