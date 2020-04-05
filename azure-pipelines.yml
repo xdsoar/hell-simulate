@@ -19,6 +19,7 @@ steps:
 - script: |
     rm yarn.lock
     yarn install
+    cat yarn.lock
   displayName: 'yarn install'
 
 - script: |
@@ -34,5 +35,5 @@ steps:
     ls
     export AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID)
     export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
-    yarn run deploy --bucket lab.goatman.me --delete --destination hell-simulate --source ./dist --distribution E9DA1ZNPQOOA2 
+    yarn run deploy --bucket lab.goatman.me --non-interactive --delete --destination hell-simulate --source ./dist --distribution E9DA1ZNPQOOA2 
   displayName: 'run publish'
