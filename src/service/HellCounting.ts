@@ -3,6 +3,20 @@ import { Weapon } from '@/model/Weapon';
 export class HellCounting {
     static WEAPONLIST: Array<Weapon> = require("@/assets/data.json");
 
+    private mapWeaponWithSuitName(): Map<string, Array<Weapon>> {
+        const weaponMap = new Map();
+        for (let weapon of HellCounting.WEAPONLIST) {
+            let suit = weaponMap.get(weapon.weaponSuit);
+            if (!suit) {
+                suit = [weapon];
+                weaponMap.set(weapon.weaponSuit, suit);
+            } else {
+                suit.push(weapon);
+            }
+        }
+        return weaponMap;
+    }
+
 
     farmingOnce(): Weapon | null {
         if (Math.random() > 0.9) {
@@ -12,26 +26,39 @@ export class HellCounting {
         return null;
     }
 
+    graduteWithSuitNameAndHold(weaponSuit: Array<string>, hold: number, aceCard: number = 0) {
+        const map = this.mapWeaponWithSuitName();
+        let aims = new Array<Weapon>();
+        for (let weapon of weaponSuit) {
+            if (!weapon)
+                continue;
+            let suit: Array<Weapon> = map.get(weapon)!;
+            aims = aims.concat(suit);
+        }
+        return this.graduateWithHold(aims, hold, aceCard);
+    }
 
-    graduateOnce(): number {
+    graduateWithHold(aimWeapons: Array<Weapon>, hold: number, aceCard: number = 0): number {
         let weaponRepo: Map<Weapon, number> = new Map();
         for (let weapon of HellCounting.WEAPONLIST) {
             weaponRepo.set(weapon, 0);
         }
-
+        const leftAim = aimWeapons.slice(hold);
         let farmingTimes = 0;
-        while (true) {
+        while (farmingTimes <= 100000 && leftAim.length > 0) {
             let weapon = this.farmingOnce();
             if (weapon != null) {
                 let curCount = weaponRepo.get(weapon);
                 weaponRepo.set(weapon, curCount ? curCount + 1 : 1);
-                let aim = weaponRepo.get(HellCounting.WEAPONLIST[0]);
-                if (aim && aim > 4) {
-                    break;
+                let aimCount = 0;
+                for (let aim of leftAim) {
+                    let realCount = weaponRepo.get(aim);
+                    if (realCount && realCount >= 1) {
+                        aimCount++;
+                    }
                 }
-                if (farmingTimes > 10000) {
+                if (aimCount + aceCard >= leftAim.length)
                     break;
-                }
             }
             farmingTimes++;
         }
@@ -39,30 +66,32 @@ export class HellCounting {
     }
 
     graduate(aimWeapons: Array<Weapon>): number {
-        let weaponRepo: Map<Weapon, number> = new Map();
-        for (let weapon of HellCounting.WEAPONLIST) {
-            weaponRepo.set(weapon, 0);
+        return this.graduateWithHold(aimWeapons, 0);
+    }
+
+    calculateForTimes(weaponSuit: Array<string>, hold: number, aceCard: number=0, times: number=1): any {
+        let result = new Array<number>();
+
+        for (let index = 0; index < times; index++) {
+            result.push(this.graduteWithSuitNameAndHold(weaponSuit, hold, aceCard));
         }
 
-        let farmingTimes = 0;
-        while (true) {
-            let weapon = this.farmingOnce();
-            if (weapon != null) {
-                let curCount = weaponRepo.get(weapon);
-                weaponRepo.set(weapon, curCount ? curCount + 1 : 1);
-                let aimCount = 0;
-                for (let aim of aimWeapons) {
-                    let realCount = weaponRepo.get(aim);
-                    if (realCount && realCount >= 1){
-                        aimCount++;
-                    }
-                }
-                if (aimCount >= aimWeapons.length)
-                    break;
-            }
-            farmingTimes++;
+        const sum = result.reduce(function (sum: number, value: number): number {
+            return sum + value;
+        });
+
+        let sorted = result.sort( (n1, n2): number => { return  n1 > n2? 1 : -1});
+
+        if (sum == 0)
+            return 0;
+
+        const quartile1 = sorted[Math.floor(result.length / 4)];
+        const quartile3 = sorted[Math.floor(result.length / 4 * 3)];
+        const avg = sum / result.length;
+        return {
+            avg: avg,
+            q1: quartile1,
+            q3: quartile3
         }
-        console.log('times is ' + farmingTimes);
-        return farmingTimes;
     }
 }
