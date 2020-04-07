@@ -1,0 +1,34 @@
+# Node.js with Vue
+# Build a Node.js project that uses Vue.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- master
+- dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- script: |
+    yarn install
+    cat yarn.lock
+  displayName: 'yarn install'
+
+- script: |
+    yarn run test
+  displayName: 'run unit test'
+
+- script: |
+    yarn run build
+  displayName: 'run build'
+
+- script: |
+    pwd
+    ls
+    export AWS_ACCESS_KEY_ID=$(AWS_ACCESS_KEY_ID)
+    export AWS_SECRET_ACCESS_KEY=$(AWS_SECRET_ACCESS_KEY)
+    yarn run deploy --bucket lab.goatman.me --non-interactive --delete --destination hell-simulate --source ./dist --distribution E9DA1ZNPQOOA2 --invalidation-path "/*"
+  displayName: 'run publish'
