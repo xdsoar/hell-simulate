@@ -9,8 +9,8 @@ test('should get a weapon successfully', () => {
             count++;
         }
     }
-    expect(count).toBeGreaterThanOrEqual(80);
-    expect(count).toBeLessThan(200);
+    expect(count).toBeGreaterThanOrEqual(50);
+    expect(count).toBeLessThan(300);
 });
 
 test('should gradute with specified weapon finally', () => {
@@ -28,9 +28,26 @@ test('should gradute quickly with some weapon hold', () => {
     let aim4 = HellCounting.WEAPONLIST[4];
     let aim5 = HellCounting.WEAPONLIST[5];
     const aims = [aim1, aim2, aim3, aim4, aim5];
-    let farmingTimes = hell.graduate(aims);
-    let lessFarmingTimes = hell.graduateWithHold(aims, 4);
-    expect(farmingTimes).toBeGreaterThanOrEqual(lessFarmingTimes);
+    const loopTime = 100;
+
+    let result1 = [];
+    let result2 = [];
+
+    const getAvg = (function (sum: number, value: number): number {
+        return sum + value;
+    });
+
+    for (let i = 0; i < loopTime; i++) {
+        result1.push(hell.graduate(aims));
+    }
+    for (let i = 0; i < loopTime; i++) {
+        result2.push(hell.graduateWithHold(aims, 4));
+    }
+
+    let avg1 = result1.reduce(getAvg);
+    let avg2 = result2.reduce(getAvg);
+
+    expect(avg1).toBeGreaterThanOrEqual(avg2);
 })
 
 test('should calcute gradute times with weapon suit name', () => {
