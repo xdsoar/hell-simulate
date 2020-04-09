@@ -81,11 +81,9 @@ test('should calcute succee with more powerful gradute algorithm', () => {
 
 
     for (let i = 0; i < calcuteTimes; i++) {
-        result1.push(hell.calculateForTimesV2(aimSuit, 0, 1).avg);
-        result2.push(hell.calculateForTimesV2(aimSuitOriginal, 0, 1).avg);
+        result1.push(hell.calculateForTimesV2(aimSuit, [0, 0], 1).avg);
+        result2.push(hell.calculateForTimesV2(aimSuitOriginal, [0], 1).avg);
     }
-    console.log(result1.reduce(getSum));
-    console.log(result2.reduce(getSum));
     expect(result1.reduce(getSum)).toBeLessThan(result2.reduce(getSum));
 })
 

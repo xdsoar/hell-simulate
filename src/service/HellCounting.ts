@@ -95,7 +95,7 @@ export class HellCounting {
         }
     }
 
-    graduteWithMoreWeaponSuitAvaliable(aimWeapons: Array<Array<string>>, aceCard: number = 0) {
+    graduteWithMoreWeaponSuitAvaliable(aimWeapons: Array<Array<string>>, hold: number[], aceCard: number = 0) {
         let weaponRepo: Map<Weapon, number> = new Map();
         for (let weapon of HellCounting.WEAPONLIST) {
             weaponRepo.set(weapon, 0);
@@ -108,14 +108,14 @@ export class HellCounting {
 
         let farmingTimes = 0;
         while (farmingTimes <= 100000) {
-            if (this.isGraduted(aims, weaponRepo, aceCard)) {
+            if (this.isGraduted(aims, weaponRepo, hold, aceCard)) {
                 break;
             }
             let weapon = this.farmingOnce();
             if (weapon != null) {
                 let curCount = weaponRepo.get(weapon);
                 weaponRepo.set(weapon, curCount ? curCount + 1 : 1);
-                if (this.isGraduted(aims, weaponRepo, aceCard)) {
+                if (this.isGraduted(aims, weaponRepo, hold, aceCard)) {
                     break;
                 }
             }
@@ -124,9 +124,10 @@ export class HellCounting {
         return farmingTimes;
     }
 
-    private isGraduted(aimWeapons: Array<Array<Weapon>>, weaponRepo: Map<Weapon, number>, aceCard: number): boolean {
+    private isGraduted(aimWeapons: Array<Array<Weapon>>, weaponRepo: Map<Weapon, number>, hold: number[], aceCard: number): boolean {
         let aimReach = 0;
-        for (let aimGroup of aimWeapons) {
+        for (let i = 0; i < aimWeapons.length; i++) {
+            let aimGroup = aimWeapons[i];
             let aimCount = 0;
             for (let aim of aimGroup) {
                 let realCount = weaponRepo.get(aim);
@@ -143,11 +144,11 @@ export class HellCounting {
         return false;
     }
 
-    calculateForTimesV2(weaponSuit: Array<Array<string>>, hold: number, aceCard: number = 0, times: number = 1): any {
+    calculateForTimesV2(weaponSuit: Array<Array<string>>, hold: number[], aceCard: number = 0, times: number = 1): any {
         let result = new Array<number>();
 
         for (let index = 0; index < times; index++) {
-            result.push(this.graduteWithMoreWeaponSuitAvaliable(weaponSuit, aceCard));
+            result.push(this.graduteWithMoreWeaponSuitAvaliable(weaponSuit, hold, aceCard));
         }
 
         const sum = result.reduce(function (sum: number, value: number): number {
