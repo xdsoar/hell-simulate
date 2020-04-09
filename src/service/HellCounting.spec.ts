@@ -1,5 +1,8 @@
 import { HellCounting } from '@/service/HellCounting';
 
+const getSum = (function (sum: number, value: number): number {
+    return sum + value;
+});
 
 test('should get a weapon successfully', () => {
     let hell = new HellCounting();
@@ -33,10 +36,6 @@ test('should gradute quickly with some weapon hold', () => {
     let result1 = [];
     let result2 = [];
 
-    const getAvg = (function (sum: number, value: number): number {
-        return sum + value;
-    });
-
     for (let i = 0; i < loopTime; i++) {
         result1.push(hell.graduate(aims));
     }
@@ -44,8 +43,8 @@ test('should gradute quickly with some weapon hold', () => {
         result2.push(hell.graduateWithHold(aims, 4));
     }
 
-    let avg1 = result1.reduce(getAvg);
-    let avg2 = result2.reduce(getAvg);
+    let avg1 = result1.reduce(getSum);
+    let avg2 = result2.reduce(getSum);
 
     expect(avg1).toBeGreaterThanOrEqual(avg2);
 })
@@ -67,5 +66,26 @@ test('should calcute avg and q1 q3 correct', () => {
     expect(stats.avg).toBeGreaterThanOrEqual(stats.q1);
 
 
+})
+
+test('should calcute succee with more powerful gradute algorithm', () => {
+    let hell = new HellCounting();
+
+    const aimSuit = [['改恶', '大恍惚'], ['手搓', '幸运777']];
+    const aimSuitOriginal = [['改恶', '大恍惚']];
+
+    const calcuteTimes = 1000;
+
+    let result1 = [];
+    let result2 = [];
+
+
+    for (let i = 0; i < calcuteTimes; i++) {
+        result1.push(hell.calculateForTimesV2(aimSuit, 0, 1).avg);
+        result2.push(hell.calculateForTimesV2(aimSuitOriginal, 0, 1).avg);
+    }
+    console.log(result1.reduce(getSum));
+    console.log(result2.reduce(getSum));
+    expect(result1.reduce(getSum)).toBeLessThan(result2.reduce(getSum));
 })
 
