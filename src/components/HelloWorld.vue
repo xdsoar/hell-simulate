@@ -65,8 +65,10 @@
         </el-form-item>
       </el-form>
       <el-row type="flex" justify="center" v-if="result">
-        <el-col :span="18" class="resultText">
-          平均而言, 你需要肝{{ result.avg }}次深渊, 比较欧的人能在{{ result.q1}}次以内毕业, 比较非的人需要 {{ result.q3 }} 次以上才能毕业</el-col>
+        <el-col
+          :span="18"
+          class="resultText"
+        >平均而言, 你需要肝{{ result.avg }}次深渊, 比较欧的人能在{{ result.q1}}次以内毕业, 比较非的人需要 {{ result.q3 }} 次以上才能毕业</el-col>
       </el-row>
     </div>
   </div>
@@ -79,31 +81,16 @@ import { HellCounting } from "@/service/HellCounting";
 
 @Component
 export default class HelloWorld extends Vue {
-  private leftWeapon!: string;
-  private headgear!: string;
-  private slotWeapon!: string;
-  private leftWeaponHold!: number;
-  private headgearHold!: number;
-  private slotHold!: number;
-  private result!: number;
-  private calculateTime!: number;
-  private crossNumber!: number;
-  private useAce!: boolean;
-
-  data() {
-    return {
-      leftWeapon: "",
-      headgear: "",
-      slotWeapon: "",
-      leftWeaponHold: 0,
-      headgearHold: 0,
-      slotHold: 0,
-      result: 0,
-      calculateTime: 1000,
-      useAce: true,
-      crossNumber: 0
-    };
-  }
+  private leftWeapon: string = "";
+  private headgear: string = "";
+  private slotWeapon: string = "";
+  private leftWeaponHold: number = 0;
+  private headgearHold: number = 0;
+  private slotHold: number = 0;
+  private result: number = 0;
+  private calculateTime: number = 1000;
+  private crossNumber: number = 0;
+  private useAce: boolean = true;
 
   mutliCalculate(): void {
     let hell = new HellCounting();
