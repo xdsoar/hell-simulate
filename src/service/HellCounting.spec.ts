@@ -64,8 +64,6 @@ test('should calcute avg and q1 q3 correct', () => {
 
     expect(stats.q1).toBeLessThanOrEqual(stats.q3);
     expect(stats.avg).toBeGreaterThanOrEqual(stats.q1);
-
-
 })
 
 test('should calcute succee with more powerful gradute algorithm', () => {
@@ -78,7 +76,6 @@ test('should calcute succee with more powerful gradute algorithm', () => {
 
     let result1 = [];
     let result2 = [];
-
 
     for (let i = 0; i < calcuteTimes; i++) {
         result1.push(hell.calculateForTimesV2(aimSuit, [0, 0], 1).avg);
